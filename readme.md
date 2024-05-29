@@ -93,10 +93,6 @@ The script will:
 - `update_google_drive_file(credentials_file, file_id, new_file_path)`: Updates an image file in Google Drive with the new QR code.
 - `main()`: Main function to execute the password rotation and QR code generation process.
 
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
 ## Acknowledgements
 
 This project uses the following libraries and APIs:
