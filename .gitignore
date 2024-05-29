@@ -1,0 +1,10 @@
+# Ignore the .env file
+.env
+
+# Ignore specific folders
+wifi-rotate/
+.data/
+
+# Ignore files inside .output/ but not the folder itself
+.output/*
+!.output/.gitignore
