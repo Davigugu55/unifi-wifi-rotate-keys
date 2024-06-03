@@ -10,6 +10,11 @@ from google.oauth2.service_account import Credentials
 from dotenv import load_dotenv
 import os
 
+# Change the working directory to the script's directory
+script_dir = os.path.dirname(os.path.abspath(__file__))
+os.chdir(script_dir)
+
+# Load .env
 load_dotenv()
 
 # Generate Random Password
