@@ -6,6 +6,7 @@ from PIL import ImageDraw, ImageFont, Image
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaFileUpload
+from google.cloud import storage
 from google.oauth2.service_account import Credentials
 from dotenv import load_dotenv
 import os
@@ -142,6 +143,24 @@ def update_google_drive_file(credentials_file, file_id, new_file_path):
 
     return file.get("id")
 
+def update_gcs_bucket_file(credentials_file, bucket_name, source_file_name, destination_blob_name):
+    # Set the environment variable for the credentials file
+    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credentials_file
+
+    # Initialize a storage client
+    client = storage.Client()
+
+    # Get the bucket
+    bucket = client.bucket(bucket_name)
+
+    # Get the blob (file) in the bucket
+    blob = bucket.blob(destination_blob_name)
+
+    # Upload the new file to the bucket, replacing the existing one
+    blob.upload_from_filename(source_file_name)
+
+    print(f'File {source_file_name} uploaded to {destination_blob_name} in bucket {bucket_name}.')
+
 # Main
 def main():
 
@@ -151,12 +170,14 @@ def main():
         if update_wifi_password(session, os.getenv('UNIFI_CONTROLLER_URL'), os.getenv('SITE_ID_1'), os.getenv('SSID_1'), new_password_1):
             update_wifi_password(session, os.getenv('UNIFI_CONTROLLER_URL'), os.getenv('SITE_ID_2'), os.getenv('SSID_1'), new_password_1)
             qr_code_path_1 = generate_custom_qr_code(os.getenv('SSID_1'), new_password_1, os.getenv('QR_LOGO_PATH_1'), os.getenv('OUTPUT_FILE_PATH_1'))
-            update_google_drive_file(os.getenv('CREDENTIALS_FILE'), os.getenv('GDRIVE_FILE_ID_1'), os.getenv('OUTPUT_FILE_PATH_1'))
+            # update_google_drive_file(os.getenv('CREDENTIALS_FILE'), os.getenv('GDRIVE_FILE_ID_1'), os.getenv('OUTPUT_FILE_PATH_1'))
+            update_gcs_bucket_file(os.getenv('CREDENTIALS_FILE'), os.getenv('GCS_BUCKET_ID'), os.getenv('OUTPUT_FILE_PATH_1'), os.getenv('OUTPUT_FILE_PATH_1'))
 
         new_password_2 = generate_password(os.getenv('PASSWORD_PREFIX_2'), 11) # Generates a password of 11 characters with the given prefix
         if update_wifi_password(session, os.getenv('UNIFI_CONTROLLER_URL'), os.getenv('SITE_ID_3'), os.getenv('SSID_2'), new_password_2):
             qr_code_path_2 = generate_custom_qr_code(os.getenv('SSID_2'), new_password_2, os.getenv('QR_LOGO_PATH_2'), os.getenv('OUTPUT_FILE_PATH_2'))
-            update_google_drive_file(os.getenv('CREDENTIALS_FILE'), os.getenv('GDRIVE_FILE_ID_2'), os.getenv('OUTPUT_FILE_PATH_2'))
+            # update_google_drive_file(os.getenv('CREDENTIALS_FILE'), os.getenv('GDRIVE_FILE_ID_2'), os.getenv('OUTPUT_FILE_PATH_2'))
+            update_gcs_bucket_file(os.getenv('CREDENTIALS_FILE'), os.getenv('GCS_BUCKET_ID'), os.getenv('OUTPUT_FILE_PATH_2'), os.getenv('OUTPUT_FILE_PATH_2'))
 
 
 if __name__ == '__main__':

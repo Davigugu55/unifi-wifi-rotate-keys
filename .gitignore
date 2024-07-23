@@ -2,6 +2,6 @@
 .env
 
 # Ignore specific folders
-wifi-rotate/
+wifi-rotate-new/
 .data/
 
