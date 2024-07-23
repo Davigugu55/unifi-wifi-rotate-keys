@@ -1,6 +1,6 @@
 # Unifi Wi-Fi Password Rotation and QR Code Generator
 
-This script automates the process of rotating passwords for public and private Wi-Fi networks managed by a Unifi Controller. It uses the Unifi API to update Wi-Fi passwords, uses qrcode library to generate QR codes for easy access, and updates image files in Google Drive with the generated QR codes.
+This script automates the process of rotating passwords for public and private Wi-Fi networks managed by a Unifi Controller. It uses the Unifi API to update Wi-Fi passwords, uses qrcode library to generate QR codes for easy access, and updates image files in GCS or Google Drive with the generated QR codes.
 
 This specific `main()` implementation manages 2 Unifi sites with the same SSID, and a third with a different SSID. Thus creating and updating two different qr-codes in Google Drive. 
 
@@ -33,7 +33,7 @@ This specific `main()` implementation manages 2 Unifi sites with the same SSID, 
 
 2. Install the required Python libraries:
     ```sh
-    pip install requests qrcode[pil] google-api-python-client google-auth python-dotenv
+    pip install requests qrcode[pil] google-api-python-client google-auth python-dotenv google-cloud-storage
     ```
 
 3. Create a `.env` file in the project root directory and add the following environment variables:
@@ -62,6 +62,8 @@ This specific `main()` implementation manages 2 Unifi sites with the same SSID, 
 
     GDRIVE_FILE_ID_1=google-drive-file-id-1
     GDRIVE_FILE_ID_2=google-drive-file-id-2
+
+    GCS_BUCKET_ID=your-gcs-bucket-id
     ```
 
 ## Usage
